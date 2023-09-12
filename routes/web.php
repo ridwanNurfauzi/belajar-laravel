@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthorsController;
 use App\Http\Controllers\HomeController;
 use App\Models\Role;
+use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -25,7 +26,7 @@ Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::group(['prefix'=>'admin'], function(){
+Route::prefix('admin')->middleware([Authenticate::class])->group(function(){
 // Route::group(['prefix'=>'admin', 'middleware' => ['auth']], function(){
 // Route::group(['prefix'=>'admin', 'middleware' => ['auth', 'role:admin']], function(){
     // Route

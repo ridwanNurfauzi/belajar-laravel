@@ -30,7 +30,7 @@ class UsersSeeder extends Seeder
         $admin = new User();
         $admin->name = 'Admin Larapus';
         $admin->email = 'admin@gmail.com';
-        $admin->password = bcrypt('r4h4s14');
+        $admin->password = bcrypt('12345678');
         $admin->save();
         // $admin->attachRole($adminRole);
         $admin->addRole($adminRole);
@@ -39,7 +39,7 @@ class UsersSeeder extends Seeder
         $member = new User();
         $member->name = "Sample Member";
         $member->email = 'member@gmail.com';
-        $member->password = bcrypt('r4h4s14');
+        $member->password = bcrypt('12345678');
         $member->save();
         // $member->attachRole($memberRole);
         $member->addRole($memberRole);

@@ -23,6 +23,8 @@ class Authenticate extends Middleware
             return redirect('/home');
         }
 
+        // return redirect('/home');
+        // return $guards;
         return $next($request);
     }
 }
