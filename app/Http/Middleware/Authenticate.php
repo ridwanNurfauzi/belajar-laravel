@@ -19,12 +19,12 @@ class Authenticate extends Middleware
 
     public function handle($request, Closure $next, ...$guards)
     {
-        if(Auth::guard($guards)->check()){
-            return redirect('/home');
-        }
+        // if(Auth::guard($guards)->check()){
+        //     return redirect('/home');
+        // }
 
-        // return redirect('/home');
-        // return $guards;
+        // // return redirect('/home');
+        // // return $guards;
         return $next($request);
     }
 }

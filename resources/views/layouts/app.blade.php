@@ -16,6 +16,8 @@
 
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/dataTables.bootstrap5.min.css">
+    <link href="/css/selectize.css" rel="stylesheet">
+    <link href="/css/selectize.bootstrap5.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/app.css">
 
@@ -44,14 +46,21 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     @if (Auth::check())
-                        <ul class="navbar-nav me-auto">
-                        <li><a href="{{ url('/home') }}">Dashboard</a></li>
-                        <li><a href="{{ route('authors.index') }}">Penulis</a></li>
+                        <ul class="navbar-nav mx-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('/home') }}">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('authors.index') }}">Penulis</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('books.index') }}">Buku</a>
+                            </li>
+                        </ul>
                     @endif
-                    </ul>
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav ms-0">
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
@@ -100,9 +109,7 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/jquery.dataTables.min.js"></script>
     <script src="/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
-        integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/js/selectize.min.js"></script>
     <script src="/js/custom.js"></script>
 
     @yield('scripts')
