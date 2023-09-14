@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RoleUser;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -22,8 +24,25 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
+    protected function adminDashboard()
+    {
+        return view('dashboard.admin');
+    }
+    protected function memberDashboard()
+    {
+        // return view('dashboard.member');
+        $borrowLogs = Auth::user()->borrowLogs()->borrowed()->get();
+        return view('dashboard.member', compact('borrowLogs'));
+    }
+
     public function index()
     {
+        if (RoleUser::hasRole('admin'))
+            return $this->adminDashboard();
+        if (RoleUser::hasRole('member'))
+            return $this->memberDashboard();
+
         return view('home');
     }
 }

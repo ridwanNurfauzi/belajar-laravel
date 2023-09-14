@@ -3,10 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Exceptions\BookException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
+use Illuminate\Support\Facades\Auth;
 use Laratrust\Traits\HasRolesAndPermissions;
 use Laratrust\Checkers\CheckersManager;
 
@@ -16,7 +18,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable
     // , LaratrustUserTrait
-    ,HasRolesAndPermissions
+    , HasRolesAndPermissions
     ;
 
     /**
@@ -49,4 +51,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function borrowLogs() {
+        return $this->hasMany(BorrowLog::class);
+    }
+
+    public function borrow(Book $book) {
+        if($this->borrowLogs()->where('book_id',$book->id)->where('is_returned', 0)->count() > 0) {
+        throw new BookException("Buku $book->title sedang Anda pinjam.");
+        }
+        $borrowLog = BorrowLog::create(['user_id'=>Auth::user()->id, 'book_id'=>$book->id]);
+        return $borrowLog;
+    }
 }

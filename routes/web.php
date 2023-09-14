@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthorsController;
 use App\Http\Controllers\BooksController;
+use App\Http\Controllers\GuestController;
 use App\Http\Controllers\HomeController;
 use App\Models\Role;
 use Illuminate\Auth\Middleware\Authenticate;
@@ -20,9 +21,15 @@ use Laratrust\Laratrust;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+Route::get('/', [GuestController::class, 'index']);
+
+Route::get('/books/{book}/borrow', [BooksController::class, 'borrow'])->name('guest.books.borrow');
+
+
+Route::put('/books/{book}/return', [BooksController::class, 'returnBack'])->name('member.books.return');
 
 Auth::routes();
 

@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Author;
 use App\Models\Book;
+use App\Models\BorrowLog;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -36,5 +38,11 @@ class BooksSeeder extends Seeder
             'title' => 'Cinta & Seks Rumah Tangga Muslim',
             'amount' => 3, 'author_id' => $author3->id
         ]);
+
+        // Sample peminjaman buku
+        $member = User::where('email', 'member@gmail.com')->first();
+        BorrowLog::create([ 'user_id' => $member->id, 'book_id' => $book1->id, 'is_returned' => 0 ]);
+        BorrowLog::create([ 'user_id' => $member->id, 'book_id' => $book2->id, 'is_returned' => 0 ]);
+        BorrowLog::create([ 'user_id' => $member->id, 'book_id' => $book3->id, 'is_returned' => 1 ]);
     }
 }
