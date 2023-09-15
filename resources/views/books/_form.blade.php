@@ -21,6 +21,11 @@
     <div class="col-md-4">
         {!! Form::number('amount', null, ['class' => 'form-control']) !!}
         {!! $errors->first('amount', '<p class="help-block">:message</p>') !!}
+        @if (isset($book))
+            <p class="help-block">
+                {{ $book->borrowed }} buku sedang dipinjam.
+            </p>
+        @endif
     </div>
 </div>
 

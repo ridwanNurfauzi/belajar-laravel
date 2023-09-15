@@ -16,10 +16,12 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable
-    // , LaratrustUserTrait
-    , HasRolesAndPermissions
-    ;
+    use HasApiTokens,
+        HasFactory,
+        Notifiable
+        // , LaratrustUserTrait
+        ,
+        HasRolesAndPermissions;
 
     /**
      * The attributes that are mass assignable.
@@ -52,15 +54,19 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function borrowLogs() {
+    public function borrowLogs()
+    {
         return $this->hasMany(BorrowLog::class);
     }
 
-    public function borrow(Book $book) {
-        if($this->borrowLogs()->where('book_id',$book->id)->where('is_returned', 0)->count() > 0) {
-        throw new BookException("Buku $book->title sedang Anda pinjam.");
+    public function borrow(Book $book)
+    {
+        if ($book->stock < 1)
+            throw new BookException("Buku $book->title sedang tidak tersedia.");
+        elseif ($this->borrowLogs()->where('book_id', $book->id)->where('is_returned', 0)->count() > 0) {
+            throw new BookException("Buku $book->title sedang Anda pinjam.");
         }
-        $borrowLog = BorrowLog::create(['user_id'=>Auth::user()->id, 'book_id'=>$book->id]);
+        $borrowLog = BorrowLog::create(['user_id' => Auth::user()->id, 'book_id' => $book->id]);
         return $borrowLog;
     }
 }

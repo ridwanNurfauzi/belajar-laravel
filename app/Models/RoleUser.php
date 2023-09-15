@@ -18,6 +18,8 @@ class RoleUser extends Model
             return (Role::all()->find(RoleUser::all()->where('user_id', Auth::user()->id)
                     ->first()->role_id)
                     ->name == $e);
+        elseif ($e == 'guest')
+            return 1; 
         else
             return 0;
     }

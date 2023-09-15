@@ -129,7 +129,9 @@ class BooksController extends Controller
         ]);
 
         $book = Book::find($id);
-        $book->update($request->all());
+        // $book->update($request->all());
+        if (!$book->update($request->all()))
+            return redirect()->back();
 
         if ($request->hasFile('cover')) {
             $uploaded_cover = $request->file('cover');
@@ -170,8 +172,12 @@ class BooksController extends Controller
     public function destroy(string $id)
     {
         $book = Book::find($id);
+        $cover = $book->cover;
+        if (!$book->delete())
+            return redirect()->back();
 
-        if ($book->cover) {
+        // if ($book->cover) {
+        if ($cover) {
             $old_cover = $book->cover;
             $filepath = public_path() . DIRECTORY_SEPARATOR . 'img' .
                 DIRECTORY_SEPARATOR . $book->cover;
