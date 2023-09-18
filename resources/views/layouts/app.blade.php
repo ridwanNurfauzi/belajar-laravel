@@ -64,6 +64,11 @@
                                     <a class="nav-link" href="{{ route('books.index') }}">Buku</a>
                                 </li>
                             @endif
+                            @if (auth()->check())
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('/settings/profile') }}">Profil</a>
+                                </li>
+                            @endif
 
                         </ul>
                     @endif

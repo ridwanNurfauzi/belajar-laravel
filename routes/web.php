@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AuthorsController;
 use App\Http\Controllers\BooksController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SettingsController;
 use App\Models\Role;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +32,14 @@ Route::get('/books/{book}/borrow', [BooksController::class, 'borrow'])->name('gu
 
 
 Route::put('/books/{book}/return', [BooksController::class, 'returnBack'])->name('member.books.return');
+
+
+Route::get('auth/verify/{token}', [RegisterController::class, 'verify']);
+Route::get('auth/send-verification', [RegisterController::class, 'sendVerification']);
+
+Route::get('settings/profile', [SettingsController::class, 'profile']);
+Route::get('settings/profile/edit', [SettingsController::class, 'editProfile']);
+Route::post('settings/profile', [SettingsController::class, 'updateProfile']);
 
 Auth::routes();
 

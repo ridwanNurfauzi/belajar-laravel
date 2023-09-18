@@ -71,6 +71,7 @@ class Kernel extends HttpKernel
         
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
 
+        'user-should-verified' => \App\Http\Middleware\UserShouldVerified::class,
     ];
 
     protected $routeMiddleware = [
@@ -79,5 +80,7 @@ class Kernel extends HttpKernel
         'ability' => \Laratrust\Middleware\LaratrustAbility::class,
 
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+
+        'user-should-verified' => \App\Http\Middleware\UserShouldVerified::class,
     ];
 }

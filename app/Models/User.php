@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Laratrust\Traits\HasRolesAndPermissions;
 use Laratrust\Checkers\CheckersManager;
 
@@ -52,6 +54,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_verified' => 'boolean',
     ];
 
     public function borrowLogs()
@@ -68,5 +71,37 @@ class User extends Authenticatable
         }
         $borrowLog = BorrowLog::create(['user_id' => Auth::user()->id, 'book_id' => $book->id]);
         return $borrowLog;
+    }
+
+    public function generateVerificationToken()
+    {
+        $token = $this->verification_token;
+        if (!$token) {
+            $token = Str::random(40);
+            $this->verification_token = $token;
+            $this->save();
+        }
+        return $token;
+    }
+
+
+    public function sendVerification()
+    {
+        $token = $this->generateVerificationToken();
+
+        $user = $this;
+        // $token = str_random(40);
+        // $user->verification_token = $token;
+        // $user->save();
+        Mail::send('auth.emails.verification', compact('user', 'token'), function ($m) use ($user) {
+            $m->to($user->email, $user->name)->subject('Verifikasi Akun Larapus');
+        });
+    }
+
+    public function verify()
+    {
+        $this->is_verified = 1;
+        $this->verification_token = null;
+        $this->save();
     }
 }

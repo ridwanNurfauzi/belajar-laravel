@@ -175,6 +175,8 @@ return [
         Laratrust\LaratrustServiceProvider::class,
 
         Yajra\DataTables\DataTablesServiceProvider::class,
+
+        Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
     ])->toArray(),
 
     /*

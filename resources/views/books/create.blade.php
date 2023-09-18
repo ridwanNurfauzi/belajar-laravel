@@ -4,19 +4,26 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ url('/home') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="{{ url('/admin/books') }}">Buku</a></li>
-                    <li class="breadcrumb-item active">Tambah Buku</li>
-                </ul>
+                <div class="my-3 p-2 rounded-3 w-full bg-white shadow">
+                    <div class="pt-2">
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url('/home') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url('/admin/books') }}">Buku</a></li>
+                            <li class="breadcrumb-item active">Tambah Buku</li>
+                        </ul>
+                    </div>
+                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title">Tambah Buku</h2>
                     </div>
                     <div class="panel-body">
-                        {!! Form::open(['url' => route('books.store'), 'method' => 'post',
-                        'files'=> 'true',
-                         'class' => 'form-horizontal']) !!}
+                        {!! Form::open([
+                            'url' => route('books.store'),
+                            'method' => 'post',
+                            'files' => 'true',
+                            'class' => 'form-horizontal',
+                        ]) !!}
                         @include('books._form')
                         {!! Form::close() !!}
                     </div>
