@@ -5,7 +5,9 @@ use App\Http\Controllers\AuthorsController;
 use App\Http\Controllers\BooksController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MembersController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\StatisticsController;
 use App\Models\Role;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Support\Facades\Auth;
@@ -41,6 +43,9 @@ Route::get('settings/profile', [SettingsController::class, 'profile']);
 Route::get('settings/profile/edit', [SettingsController::class, 'editProfile']);
 Route::post('settings/profile', [SettingsController::class, 'updateProfile']);
 
+Route::get('settings/password', [SettingsController::class, 'editPassword']);
+Route::post('settings/password', [SettingsController::class, 'updatePassword']);
+
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -51,4 +56,6 @@ Route::prefix('admin')->middleware([Authenticate::class])->group(function(){
     // Route
     Route::resource('authors', AuthorsController::class);
     Route::resource('books', BooksController::class);
+    Route::resource('members', MembersController::class);
+    Route::get('statistics', [StatisticsController::class, 'index'])->name('statistics.index');
 });

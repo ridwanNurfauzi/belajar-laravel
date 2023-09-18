@@ -5,7 +5,9 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ __('Register') }}</div>
+                    <div class="card-header">
+                        {{ __('Register') }}
+                    </div>
 
                     <div class="card-body">
                         <form method="POST" action="{{ route('register') }}">
@@ -72,9 +74,11 @@
                             </div>
 
                             <div class="form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
-                                <div class="col-md-offset-4 col-md-6">
-                                    {!! app('captcha')->display() !!}
-                                    {!! $errors->first('g-recaptcha-response', '<p class="help-block">:message</p>') !!}
+                                <div class="row">
+                                    <div class=" col-md-12 d-flex justify-content-center">
+                                        {!! app('captcha')->display() !!}
+                                        {!! $errors->first('g-recaptcha-response', '<p class="help-block">:message</p>') !!}
+                                    </div>
                                 </div>
                             </div>
 

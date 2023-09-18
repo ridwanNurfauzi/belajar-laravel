@@ -63,6 +63,13 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('books.index') }}">Buku</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('members.index') }}">Member</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('statistics.index') }}">Peminjaman</a>
+                                </li>
+
                             @endif
                             @if (auth()->check())
                                 <li class="nav-item">
@@ -96,6 +103,9 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ url('/settings/password') }}"><i class="fa fa-btn fa-lock"></i>
+                                        Ubah Password
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
