@@ -58,4 +58,7 @@ Route::prefix('admin')->middleware([Authenticate::class])->group(function(){
     Route::resource('books', BooksController::class);
     Route::resource('members', MembersController::class);
     Route::get('statistics', [StatisticsController::class, 'index'])->name('statistics.index');
+
+    Route::get('export/books', [BooksController::class, 'export'])->name('export.books');
+    Route::post('export/books', [BooksController::class, 'exportPost'])->name('export.books.post');
 });

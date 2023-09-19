@@ -3,16 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\BookException;
+use App\Exports\BooksExport;
 use App\Models\Book;
 use App\Models\BorrowLog;
 use App\Models\RoleUser;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Html\Builder;
 
@@ -258,5 +261,57 @@ class BooksController extends Controller
         } else {
             return redirect('/login');
         }
+    }
+
+    public function export()
+    {
+        return view('books.export');
+    }
+    public function exportPost(Request $request)
+    {
+        $this->validate($request, [
+            'author_id' => 'required',
+            'type' => 'required|in:pdf,xls'
+        ], [
+            'author_id.required' => 'Anda belum memilih penulis. Pilih minimal 1 penulis.'
+        ]);
+        $books = Book::whereIn('id', $request->get('author_id'))->get();
+        // $books = Book::all();
+        // Excel::download(function ($excel) use ($books) {
+        //     // Set property
+        //     $excel->setTitle('Data Buku Larapus')
+        //         ->setCreator(Auth::user()->name);
+        //     $excel->sheet('Data Buku', function ($sheet) use ($books) {
+        //         $row = 1;
+        //         $sheet->row($row, [
+        //             'Judul',
+        //             'Jumlah',
+        //             'Stok',
+        //             'Penulis'
+        //         ]);
+        //         foreach ($books as $book) {
+        //             $sheet->row(++$row, [
+        //                 $book->title,
+        //                 $book->amount,
+        //                 $book->stock,
+        //                 $book->author->name
+        //             ]);
+        //         }
+        //     });
+        // }, 'Data Buku Larapus')->export('xls');
+        if ($request->get('type') == 'xls')
+            return Excel::download(new BooksExport($books), 'Data Buku Larapus.xls');
+        // return 'excel';
+        elseif ($request->get('type') == 'pdf')
+            // return $this->exportPdf();
+            return view('pdf.books');
+            // return 'pdfffff';
+        // return $books;
+    }
+
+    private function exportPdf($books = null)
+    {
+        $pdf = Pdf::loadView('pdf.books', compact('books'));
+        return $pdf->download('buku.pdf');
     }
 }
