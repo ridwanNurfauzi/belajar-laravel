@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\BookException;
 use App\Exports\BooksExport;
+use App\Models\Author;
 use App\Models\Book;
 use App\Models\BorrowLog;
 use App\Models\RoleUser;
@@ -303,15 +304,18 @@ class BooksController extends Controller
             return Excel::download(new BooksExport($books), 'Data Buku Larapus.xls');
         // return 'excel';
         elseif ($request->get('type') == 'pdf')
-            // return $this->exportPdf();
-            return view('pdf.books');
+        {
+            $author = Author::all();
+            return $this->exportPdf($books, $author);
+            // return view('pdf.books', compact('books', 'author'));
             // return 'pdfffff';
+        }
         // return $books;
     }
 
-    private function exportPdf($books = null)
+    private function exportPdf($books = null, $author = null)
     {
-        $pdf = Pdf::loadView('pdf.books', compact('books'));
+        $pdf = Pdf::loadView('pdf.books', compact('books', 'author'));
         return $pdf->download('buku.pdf');
     }
 }
