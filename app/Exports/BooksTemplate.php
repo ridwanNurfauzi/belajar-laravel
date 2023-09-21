@@ -3,18 +3,19 @@
 
 namespace App\Exports;
 
+use App\Models\Book;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class BooksExport implements FromCollection, WithHeadings, WithStyles, WithMapping
+class BooksTemplate implements FromCollection, WithHeadings, WithStyles, WithMapping
 {
     private $var;
-    public function __construct($var = [[]])
+    public function __construct()
     {
-        $this->var = $var;
+        $this->var = Book::all();
     }
 
     public function collection()
@@ -36,17 +37,6 @@ class BooksExport implements FromCollection, WithHeadings, WithStyles, WithMappi
 
     public function map($book): array
     {
-        if ($book != null)
-            return [
-                $book->title,
-                $book->author_id,
-                $book->amount,
-                $book->cover,
-                $book->created_at,
-                $book->updated_at,
-                $book->author->name
-            ];
-        else
-            return [];
+        return [];
     }
 }

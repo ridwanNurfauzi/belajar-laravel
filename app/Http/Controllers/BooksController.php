@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\BookException;
 use App\Exports\BooksExport;
+use App\Exports\BooksTemplate;
+use App\Imports\BooksImport;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\BorrowLog;
@@ -16,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Html\Builder;
@@ -276,7 +279,7 @@ class BooksController extends Controller
         ], [
             'author_id.required' => 'Anda belum memilih penulis. Pilih minimal 1 penulis.'
         ]);
-        $books = Book::whereIn('id', $request->get('author_id'))->get();
+        $books = Book::whereIn('author_id', $request->get('author_id'))->get();
         // $books = Book::all();
         // Excel::download(function ($excel) use ($books) {
         //     // Set property
@@ -303,19 +306,68 @@ class BooksController extends Controller
         if ($request->get('type') == 'xls')
             return Excel::download(new BooksExport($books), 'Data Buku Larapus.xls');
         // return 'excel';
-        elseif ($request->get('type') == 'pdf')
-        {
-            $author = Author::all();
-            return $this->exportPdf($books, $author);
+        else{if ($request->get('type') == 'pdf') {
+            return $this->exportPdf($books);
             // return view('pdf.books', compact('books', 'author'));
             // return 'pdfffff';
-        }
+        }}
         // return $books;
     }
 
-    private function exportPdf($books = null, $author = null)
+    private function exportPdf($books = null)
     {
-        $pdf = Pdf::loadView('pdf.books', compact('books', 'author'));
+        $pdf = Pdf::loadView('pdf.books', compact('books'));
         return $pdf->download('buku.pdf');
+    }
+
+    public function generateExcelTemplate()
+    {
+        return Excel::download(new BooksTemplate(), 'template-buku.xls');
+    }
+    public function importExcel(Request $request)
+    {
+        $this->validate($request, ['excel' => 'required|mimes:xls,xlsx']);
+        $excel = $request->file('excel');
+        // $excels = Excel::selectSheetsByIndex(0)->load($excel, function ($reader) {
+        // })->get();
+        // $excels = Excel::import(new BooksImport(), $excel);
+        $excels = Excel::toArray(new BooksImport(), $excel)[0];
+        $rowRules = [
+            'judul' => 'required',
+            'penulis' => 'required',
+            'jumlah' => 'required'
+        ];
+        $books_id = [];
+        foreach ($excels as $row) {
+            $validator = Validator::make($row, $rowRules);
+            if ($validator->fails()) continue;
+            $author = Author::where('name', $row['penulis'])->first();
+            if (!$author) {
+                $author = Author::create(['name' => $row['penulis']]);
+            }
+            $book = Book::create([
+                'title' => $row['judul'],
+                'author_id' => $author->id,
+                'amount' => $row['jumlah']
+            ]);
+            array_push($books_id, $book->id);
+        }
+
+
+        $books = Book::whereIn('id', $books_id)->get();
+        if ($books->count() == 0) {
+            Session::flash("flash_notification", [
+                "level" => "danger",
+                "message" => "Tidak ada buku yang berhasil diimport."
+            ]);
+            return redirect()->back();
+        }
+        Session::flash("flash_notification", [
+            "level" => "success",
+            "message" => "Berhasil mengimport " . $books->count() . " buku."
+        ]);
+        return redirect()->route('books.index');
+
+        return $excels;
     }
 }

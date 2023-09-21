@@ -18,14 +18,49 @@
                         <h2 class="panel-title">Tambah Buku</h2>
                     </div>
                     <div class="panel-body">
-                        {!! Form::open([
+                        {{-- {!! Form::open([
                             'url' => route('books.store'),
                             'method' => 'post',
                             'files' => 'true',
                             'class' => 'form-horizontal',
                         ]) !!}
-                        @include('books._form')
-                        {!! Form::close() !!}
+                        @include('books._form') 
+                        {!! Form::close() !!} --}}
+
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="nav-item">
+                                <button class="nav-link active" data-bs-target="#form" aria-controls="form" role="tab" data-bs-toggle="tab">
+                                    <i class="fa fa-pencil-square-o"></i> Isi Form
+                                </button>
+                            </li>
+                            <li role="presentation" class="nav-item">
+                                <button class="nav-link" data-bs-target="#upload" aria-controls="upload" role="tab" data-bs-toggle="tab">
+                                    <i class="fa fa-cloud-upload"></i> Upload Excel
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane fade show active" id="form">
+                                {!! Form::open([
+                                    'url' => route('books.store'),
+                                    'method' => 'post',
+                                    'files' => 'true',
+                                    'class' => 'form-horizontal',
+                                ]) !!}
+                                @include('books._form')
+                                {!! Form::close() !!}
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade" id="upload">
+                                {!! Form::open([
+                                    'url' => route('import.books'),
+                                    'method' => 'post',
+                                    'files' => 'true',
+                                    'class' => 'form-horizontal',
+                                ]) !!}
+                                @include('books._import')
+                                {!! Form::close() !!}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -61,4 +61,7 @@ Route::prefix('admin')->middleware([Authenticate::class])->group(function(){
 
     Route::get('export/books', [BooksController::class, 'export'])->name('export.books');
     Route::post('export/books', [BooksController::class, 'exportPost'])->name('export.books.post');
+
+    Route::get('template/books', [BooksController::class, 'generateExcelTemplate'])->name('template.books');
+    Route::post('import/books', [BooksController::class, 'importExcel'])->name('import.books');
 });
