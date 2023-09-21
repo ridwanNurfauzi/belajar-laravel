@@ -25,7 +25,7 @@ class BooksTemplate implements FromCollection, WithHeadings, WithStyles, WithMap
 
     public function headings(): array
     {
-        return ['Judul', 'id penulis', 'jumlah', 'cover', 'dibuat ', 'diupdate', 'penulis'];
+        return ['Judul', 'penulis', 'jumlah'];
     }
 
     public function styles(Worksheet $sheet)

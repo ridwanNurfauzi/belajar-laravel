@@ -176,12 +176,16 @@ class BooksController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    // public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
         $book = Book::find($id);
         $cover = $book->cover;
         if (!$book->delete())
             return redirect()->back();
+
+        if ($request->ajax())
+            return response()->json(['id' => $id]);
 
         // if ($book->cover) {
         if ($cover) {
@@ -306,11 +310,13 @@ class BooksController extends Controller
         if ($request->get('type') == 'xls')
             return Excel::download(new BooksExport($books), 'Data Buku Larapus.xls');
         // return 'excel';
-        else{if ($request->get('type') == 'pdf') {
-            return $this->exportPdf($books);
-            // return view('pdf.books', compact('books', 'author'));
-            // return 'pdfffff';
-        }}
+        else {
+            if ($request->get('type') == 'pdf') {
+                return $this->exportPdf($books);
+                // return view('pdf.books', compact('books', 'author'));
+                // return 'pdfffff';
+            }
+        }
         // return $books;
     }
 
@@ -366,8 +372,10 @@ class BooksController extends Controller
             "level" => "success",
             "message" => "Berhasil mengimport " . $books->count() . " buku."
         ]);
-        return redirect()->route('books.index');
 
-        return $excels;
+
+        // return redirect()->route('books.index');
+
+        return view('books.import-review')->with(compact('books'));
     }
 }
