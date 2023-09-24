@@ -21,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        require base_path().'/App/Helpers/frontend.php';
         //
         Validator::extend('passcheck', function ($attribute, $value, $parameters) {
             return Hash::check($value, $parameters[0]);
