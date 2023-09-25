@@ -25,9 +25,6 @@ use Yajra\DataTables\Html\Builder;
 
 class BooksController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request, Builder $htmlBuilder)
     {
         if ($request->ajax()) {
@@ -54,18 +51,10 @@ class BooksController extends Controller
         return view('books.index')->with(compact('html'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
         return view('books.create');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -106,26 +95,17 @@ class BooksController extends Controller
         return redirect()->route('books.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        // Menampilkan item berdasarkan id
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $book = Book::find($id);
         return view('books.edit')->with(compact('book'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $this->validate($request, [
@@ -136,7 +116,6 @@ class BooksController extends Controller
         ]);
 
         $book = Book::find($id);
-        // $book->update($request->all());
         if (!$book->update($request->all()))
             return redirect()->back();
 
@@ -173,10 +152,6 @@ class BooksController extends Controller
         return redirect()->route('books.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    // public function destroy(string $id)
     public function destroy(Request $request, string $id)
     {
         $book = Book::find($id);
@@ -187,7 +162,6 @@ class BooksController extends Controller
         if ($request->ajax())
             return response()->json(['id' => $id]);
 
-        // if ($book->cover) {
         if ($cover) {
             $old_cover = $book->cover;
             $filepath = public_path() . DIRECTORY_SEPARATOR . 'img' .
@@ -215,13 +189,6 @@ class BooksController extends Controller
         if (Auth::user() != null) {
             try {
                 $book = Book::findOrFail($id);
-                // BorrowLog::create([
-                //     'user_id' => Auth::user()->id,
-                //     'book_id' => $id
-                // ]);
-                // User::borrow($book);
-                // $user = new User();
-                // $user->borrow($book);
                 Auth::user()->borrow($book);
 
                 Session::flash("flash_notification", [
@@ -284,40 +251,13 @@ class BooksController extends Controller
             'author_id.required' => 'Anda belum memilih penulis. Pilih minimal 1 penulis.'
         ]);
         $books = Book::whereIn('author_id', $request->get('author_id'))->get();
-        // $books = Book::all();
-        // Excel::download(function ($excel) use ($books) {
-        //     // Set property
-        //     $excel->setTitle('Data Buku Larapus')
-        //         ->setCreator(Auth::user()->name);
-        //     $excel->sheet('Data Buku', function ($sheet) use ($books) {
-        //         $row = 1;
-        //         $sheet->row($row, [
-        //             'Judul',
-        //             'Jumlah',
-        //             'Stok',
-        //             'Penulis'
-        //         ]);
-        //         foreach ($books as $book) {
-        //             $sheet->row(++$row, [
-        //                 $book->title,
-        //                 $book->amount,
-        //                 $book->stock,
-        //                 $book->author->name
-        //             ]);
-        //         }
-        //     });
-        // }, 'Data Buku Larapus')->export('xls');
         if ($request->get('type') == 'xls')
             return Excel::download(new BooksExport($books), 'Data Buku Larapus.xls');
-        // return 'excel';
         else {
             if ($request->get('type') == 'pdf') {
                 return $this->exportPdf($books);
-                // return view('pdf.books', compact('books', 'author'));
-                // return 'pdfffff';
             }
         }
-        // return $books;
     }
 
     private function exportPdf($books = null)
@@ -334,9 +274,6 @@ class BooksController extends Controller
     {
         $this->validate($request, ['excel' => 'required|mimes:xls,xlsx']);
         $excel = $request->file('excel');
-        // $excels = Excel::selectSheetsByIndex(0)->load($excel, function ($reader) {
-        // })->get();
-        // $excels = Excel::import(new BooksImport(), $excel);
         $excels = Excel::toArray(new BooksImport(), $excel)[0];
         $rowRules = [
             'judul' => 'required',
@@ -372,9 +309,6 @@ class BooksController extends Controller
             "level" => "success",
             "message" => "Berhasil mengimport " . $books->count() . " buku."
         ]);
-
-
-        // return redirect()->route('books.index');
 
         return view('books.import-review')->with(compact('books'));
     }
