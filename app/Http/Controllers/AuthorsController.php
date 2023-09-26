@@ -10,14 +10,10 @@ use Yajra\DataTables\Facades\DataTables;
 
 class AuthorsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request, Builder $htmlBuilder)
     {
         if ($request->ajax()) {
             $authors = Author::all();
-            // return DataTables::of($authors)->make(true);
             return DataTables::of($authors)
                 ->addColumn('action', function ($author) {
                     return view('datatable._action', [
@@ -33,25 +29,16 @@ class AuthorsController extends Controller
             ->addColumn(['data' => 'name', 'name' => 'name', 'title' => 'Nama'])
             ->addColumn(['data' => 'action', 'name' => 'action', 'title' => '', 'orderable' => false, 'searchable' => false]);
 
-        //
         return view('authors.index')->with(compact('html'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
         return view('authors.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //  
         $this->validate($request, ['name' => 'required|unique:authors']);
         $author = Author::create($request->all());
         Session::flash("flash_notification", [
@@ -61,30 +48,19 @@ class AuthorsController extends Controller
         return redirect()->route('authors.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        // Menampilkan item berdasarkan id
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        //
         $author = Author::find($id);
         return view('authors.edit')->with(compact('author'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
         $this->validate($request, ['name' => 'required|unique:authors,name,' . $id]);
         $author = Author::find($id);
         $author->update($request->only('name'));
@@ -95,13 +71,8 @@ class AuthorsController extends Controller
         return redirect()->route('authors.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
-        // Author::destroy($id);
         if (!Author::destroy($id)){
             return redirect()->back();
         }

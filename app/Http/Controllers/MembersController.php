@@ -23,8 +23,6 @@ class MembersController extends Controller
             $members = Role::where('name', 'member')->first()->users;
             return DataTables::of($members)
                 ->addColumn('name', function ($member) {
-                    // $txt = ' <a href="' . route('members.show', $member->id) . '">' . $member->name . '</a> ';
-                    // return $txt;
                     return view('datatable._adminMemberName', [
                         'url' => route('members.show', $member->id),
                         'name' => $member->name
@@ -62,13 +60,10 @@ class MembersController extends Controller
         $password = str_random(6);
         $data = $request->all();
         $data['password'] = bcrypt($password);
-        // bypass verifikasi
         $data['is_verified'] = 1;
         $member = User::create($data);
-        // set role
         $memberRole = Role::where('name', 'member')->first();
         $member->addRole($memberRole);
-        // kirim email
         Mail::send('auth.emails.invite', compact('member', 'password'), function ($m) use ($member) {
             $m->to($member->email, $member->name)->subject('Anda telah didaftarkan di Larapus!');
         });
@@ -95,7 +90,6 @@ class MembersController extends Controller
      */
     public function edit(string $id)
     {
-        //
         $member = User::find($id);
         return view('members.edit')->with(compact('member'));
     }

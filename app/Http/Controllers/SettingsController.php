@@ -13,7 +13,7 @@ class SettingsController extends Controller
     {
         $this->middleware(Authenticate::class);
     }
-    //
+
     public function profile()
     {
         return view('settings.profile');

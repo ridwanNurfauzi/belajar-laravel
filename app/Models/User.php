@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Laratrust\Traits\HasRolesAndPermissions;
-use Laratrust\Checkers\CheckersManager;
 
 use Laravel\Sanctum\HasApiTokens;
 
@@ -20,9 +19,7 @@ class User extends Authenticatable
 {
     use HasApiTokens,
         HasFactory,
-        Notifiable
-        // , LaratrustUserTrait
-        ,
+        Notifiable,
         HasRolesAndPermissions;
 
     /**
@@ -90,9 +87,6 @@ class User extends Authenticatable
         $token = $this->generateVerificationToken();
 
         $user = $this;
-        // $token = str_random(40);
-        // $user->verification_token = $token;
-        // $user->save();
         Mail::send('auth.emails.verification', compact('user', 'token'), function ($m) use ($user) {
             $m->to($user->email, $user->name)->subject('Verifikasi Akun Larapus');
         });

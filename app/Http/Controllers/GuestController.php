@@ -3,17 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
-use App\Models\BorrowLog;
-use App\Models\Role;
 use App\Models\RoleUser;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
 
 class GuestController extends Controller
 {
-    //
     public function index(Request $request, Builder $htmlBuilder)
     {
         if ($request->ajax()) {
