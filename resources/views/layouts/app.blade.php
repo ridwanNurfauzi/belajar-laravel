@@ -48,49 +48,23 @@
                     @if (Auth::check())
                         <ul class="navbar-nav ms-auto">
                             @if (Auth::user())
-                                {{-- <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('/') }}">Home</a>
-                                </li> --}}
                                 {!! Html::smartNav(url('/'), 'Home') !!}
                             @endif
 
-                            {{-- <li class="nav-item">
-                                <a class="nav-link" href="{{ url('/home') }}">Dashboard</a>
-                            </li> --}}
-                            {{-- <li class="nav-item">
-                                <a class="nav-link {{ url('/home') == request()->url() ? 'active' : '' }}" href="{{ url('/home') }}">Dashboard</a>
-                            </li> --}}
                             {!! Html::smartNav(url('/home'), 'Dashboard') !!}
-                            
-                            
+
+
                             @if (App\Models\RoleUser::hasRole('admin'))
-                                {{-- <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('authors.index') }}">Penulis</a>
-                                </li> --}}
                                 {!! Html::smartNav(route('authors.index'), 'Penulis') !!}
-                                
-                                {{-- <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('books.index') }}">Buku</a>
-                                </li> --}}
+
                                 {!! Html::smartNav(route('books.index'), 'Buku') !!}
-                                
-                                {{-- <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('members.index') }}">Member</a>
-                                </li> --}}
+
                                 {!! Html::smartNav(route('members.index'), 'Member') !!}
-                                
-                                {{-- <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('statistics.index') }}">Peminjaman</a>
-                                </li> --}}
+
                                 {!! Html::smartNav(route('statistics.index'), 'Peminjaman') !!}
-                                
-                                @endif
-                                
-                                @if (auth()->check())
-                                {{-- <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('/settings/profile') }}">Profil</a>
-                                </li>
-                                --}}
+                            @endif
+
+                            @if (auth()->check())
                                 {!! Html::smartNav(url('/settings/profile'), 'Profil') !!}
                             @endif
 
@@ -120,7 +94,8 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ url('/settings/password') }}"><i class="fa fa-btn fa-lock"></i>
+                                    <a class="dropdown-item" href="{{ url('/settings/password') }}"><i
+                                            class="fa fa-btn fa-lock"></i>
                                         Ubah Password
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"

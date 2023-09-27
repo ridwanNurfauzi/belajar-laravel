@@ -20,7 +20,6 @@
 @endsection
 
 @section('scripts')
-    {{-- <script src="/js/Chart.min.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         var data = {

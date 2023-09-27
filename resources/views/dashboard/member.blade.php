@@ -19,7 +19,6 @@
                                         @endif
                                         <ul>
                                             @foreach ($borrowLogs as $borrowLog)
-                                                {{-- <li>{{ $borrowLog->book->title }}</li>  --}}
                                                 <li>
                                                     {!! Form::open([
                                                         'url' => route('member.books.return', $borrowLog->book_id),
