@@ -25,9 +25,6 @@ use Laratrust\Laratrust;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 Route::get('/', [GuestController::class, 'index']);
 
 Route::get('/books/{book}/borrow', [BooksController::class, 'borrow'])->name('guest.books.borrow');
@@ -51,9 +48,6 @@ Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::prefix('admin')->middleware([Authenticate::class])->group(function(){
-// Route::group(['prefix'=>'admin', 'middleware' => ['auth']], function(){
-// Route::group(['prefix'=>'admin', 'middleware' => ['auth', 'role:admin']], function(){
-    // Route
     Route::resource('authors', AuthorsController::class);
     Route::resource('books', BooksController::class);
     Route::resource('members', MembersController::class);
